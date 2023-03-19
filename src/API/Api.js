@@ -30,5 +30,6 @@ export async function getCourse(id) {
   const token = await getToken();
   const headers = getPreparedHeaders(token);
   const response = await axios.get(API_URL + COURSE_PATH + id, headers);
-  return response.data.courses;
+  console.log(response.data)
+  return response.data;
 }

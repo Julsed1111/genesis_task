@@ -1,71 +1,52 @@
 import React, { useEffect, useState } from "react";
 import Hls from "hls.js";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Grid } from "@mui/material";
 
 function VideoCourse({ videoLink, videoId, order, videoPreviewImageLink }) {
-    const [videoRef, setVideoRef] = useState(null);
+  const [videoRef, setVideoRef] = useState(null);
 
-    useEffect(() => {
-        if (videoRef) {
-            videoRef.volume = 0.4;
-        }
-    }, [videoRef]);
-
-    useEffect(() => {
-        const initVideoPlayback = () => {
-            if (videoRef) {
-                if (Hls.isSupported()) {
-                    const hls = new Hls();
-                    hls.loadSource(videoLink);
-                    hls.attachMedia(videoRef);
-                } else if (videoRef.canPlayType("application/vnd.apple.mpegurl")) {
-                    videoRef.src = videoLink;
-                }
-            }
-        };
-
-        if (videoRef && videoLink) {
-            initVideoPlayback();
-        }
-
-        return () => {
-            document.removeEventListener("exitpictureinpicture", handleExitPiP);
-        };
-    }, [videoRef, videoLink]);
-
-    const handleEnterPiP = () => {
-        if (videoRef && document.pictureInPictureEnabled) {
-            videoRef.requestPictureInPicture();
-        }
+  useEffect(() => {
+    const initVideo = () => {
+      if (videoRef) {
+          const hls = new Hls();
+          hls.loadSource(videoLink);
+          hls.attachMedia(videoRef);
+      }
     };
 
-    const handleExitPiP = () => {};
+    if (videoRef && videoLink) {
+        initVideo();
+    }
 
-    return (
-        <>
-            <Form>
-                <Row>
-                    <Col md="auto">
-                        <video
-                            id={`video-${videoId}`}
-                            ref={setVideoRef}
-                            controls
-                            width="640"
-                            height="360"
-                            poster={`${videoPreviewImageLink}/lesson-${order}.webp`}
-                        ></video>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <Button className="mt-50" onClick={handleEnterPiP}>
-                            Смотреть в режиме Picture-in-Picture
-                        </Button>
-                    </Col>
-                </Row>
-            </Form>
-        </>
-    );
+  }, [videoRef, videoLink]);
+
+  const handleEnterPiP = () => {
+    if (videoRef && document.pictureInPictureEnabled) {
+      videoRef.requestPictureInPicture();
+    }
+  };
+
+  return (
+    <Grid container spacing={2} alignItems="center">
+      <Grid item xs={12}>
+        {(
+          <video
+            id={`video-${videoId}`}
+            ref={setVideoRef}
+            className="video-course"
+            controls
+            poster={`${videoPreviewImageLink}/lesson-${order}.webp`}
+            style={{width: "640px", height: "360px"}}
+          ></video>
+        )}
+      </Grid>
+      <Grid item xs={12}>
+        <Button variant="contained" color="primary" onClick={handleEnterPiP}>
+          Смотреть в режиме Picture-in-Picture
+        </Button>
+      </Grid>
+    </Grid>
+  );
 }
 
 export default VideoCourse;

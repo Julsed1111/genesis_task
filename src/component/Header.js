@@ -1,7 +1,6 @@
 import React from 'react';
-import { AppBar, Container, Toolbar, Typography } from '@mui/material';
-import { Link, Route, Routes } from 'react-router-dom';
-import logo from './react-logo.png';
+import { Container } from '@mui/material';
+import { Route, Routes } from 'react-router-dom';
 import CoursesForm from './ListCourses';
 import CourseDetails from './CoursesDetail';
 
